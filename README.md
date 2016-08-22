@@ -1,6 +1,6 @@
 What is this
 ----
-This is an example application demonstrating wrong behaviour when stopping a TomEE that has a Hazelcast node running as part of the application.
+This is an example application demonstrating wrong behaviour when stopping a TomEE that has a Hazelcast node providing a JCache implementation as part of the application.
 
 How to use this
 ----
