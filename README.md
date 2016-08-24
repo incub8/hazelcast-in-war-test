@@ -2,14 +2,17 @@ What is this
 ----
 This is an example application demonstrating wrong behaviour when stopping a TomEE that has a Hazelcast node providing a JCache implementation as part of the application.
 
-What has changed since the [initial test case](https://github.com/schroenser/hazelcast-in-war-test/tree/initial-test-case)
+What has changed since [we are closing the cache on shutdown](https://github.com/schroenser/hazelcast-in-war-test/tree/closing-cache-on-shutdown)
 ----
-A `CacheClosingShutdownBean` was added that observes the destruction of the application scope and calls `close()` on the `CachingProvider`. As Hazelcast is now shut down correctly, TomEE no longer complains about threads on shut down.
+* The `CacheUsingStartupBean` was refactored to the `CacheConfiguringStartupBean` which now configures a cache for greetings.
+* A `GreetingResource` was added to be able to actually use the greeting cache.
+* Logging was added to see what's going on.
 
-This in turn closes and destroys all of Hazelcasts cache managers. This solution was inspired by Romain Manni-Bucaus [answer to Stack Overflow - Hazelcast threads prevent TomEE from stopping](http://stackoverflow.com/a/39080578/2060692) 
+Those changes yielded no difference. TomEE is still able to shut down normally, even after the cache was accessed by calling the resource.
 
 How to use this
 ----
 1. Build and start using maven: `mvn clean package tomee:run`
 2. Wait for TomEE to complete starting. It should say something like `INFO - Server startup in XYZ ms`.
-3. Stop TomEE by issuing `quit` in the console.
+3. Call the resource by accessing [http://localhost:8080/hazelcast-in-war-test-1.0-SNAPSHOT/greeting](http://localhost:8080/hazelcast-in-war-test-1.0-SNAPSHOT/greeting) with a browser
+4. Stop TomEE by issuing `quit` in the console.
